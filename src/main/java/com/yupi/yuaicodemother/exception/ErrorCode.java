@@ -25,6 +25,14 @@ public enum ErrorCode {
      */
     private final String message;
 
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
