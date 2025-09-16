@@ -1,5 +1,7 @@
 package com.yupi.yuaicodemother.ai;
 
+import com.yupi.yuaicodemother.ai.model.HtmlCodeResult;
+import com.yupi.yuaicodemother.ai.model.MultiFileCodeResult;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,13 +14,13 @@ class AiCodeGeneratorServiceTest {
 
     @Test
     void generateHtmlCode() {
-        String result = aiCodeGeneratorService.generateHtmlCode("做个程序员鱼皮的留言板,不超过50行");
+        HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode("做个程序员鱼皮的留言板,不超过50行");
         Assertions.assertNotNull(result);
     }
 
     @Test
     void generateMultiFileCode() {
-        String multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个程序员鱼皮的留言板");
+        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个程序员鱼皮的留言板,不超过50行,并以json格式包含htmlCode、cssCode、jsCode和description字段");
         Assertions.assertNotNull(multiFileCode);
     }
 }
