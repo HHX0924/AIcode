@@ -20,7 +20,7 @@ class AiCodeGeneratorServiceTest {
 
     @Test
     void generateMultiFileCode() {
-        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个程序员鱼皮的留言板,不超过50行,并以json格式包含htmlCode、cssCode、jsCode和description字段");
+        MultiFileCodeResult multiFileCode = aiCodeGeneratorService.generateMultiFileCode("做个任务记录,不超过50行");
         Assertions.assertNotNull(multiFileCode);
     }
 }
