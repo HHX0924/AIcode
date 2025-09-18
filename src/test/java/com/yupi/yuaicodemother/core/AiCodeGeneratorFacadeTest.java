@@ -17,7 +17,7 @@ class AiCodeGeneratorFacadeTest {
     private AiCodeGeneratorFacade aiCodeGeneratorFacade;
     @Test
     void generateAndSaveCode() {
-        File file = aiCodeGeneratorFacade.generateAndSaveCode("做个日记,不超过50行", CodeGenTypeEnum.MULTI_FILE);
+        File file = aiCodeGeneratorFacade.generateAndSaveCode("做个日记,不超过30行", CodeGenTypeEnum.HTML);
         Assertions.assertNotNull(file);
     }
 
