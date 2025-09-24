@@ -1,6 +1,7 @@
 package com.yupi.yuaicodemother.core;
 
 import com.yupi.yuaicodemother.ai.AiCodeGeneratorService;
+import com.yupi.yuaicodemother.ai.AiCodeGeneratorServiceFactory;
 import com.yupi.yuaicodemother.ai.model.HtmlCodeResult;
 import com.yupi.yuaicodemother.ai.model.MultiFileCodeResult;
 import com.yupi.yuaicodemother.core.parser.CodeParserExecutor;
@@ -24,6 +25,8 @@ public class AiCodeGeneratorFacade {
 
     @Resource
     private AiCodeGeneratorService aiCodeGeneratorService;
+    @Resource
+    private AiCodeGeneratorServiceFactory aiCodeGeneratorServiceFactory;
 
     /**
      * 统一入口：根据类型生成并保存代码
@@ -33,6 +36,8 @@ public class AiCodeGeneratorFacade {
      * @return 保存的目录
      */
     public File generateAndSaveCode(String userMessage, CodeGenTypeEnum codeGenTypeEnum,Long appId) {
+        // 根据 appId 获取对应的 AI 服务实例
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId,codeGenTypeEnum);
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
@@ -62,6 +67,7 @@ public class AiCodeGeneratorFacade {
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId, codeGenTypeEnum);
         return switch (codeGenTypeEnum) {
             case HTML -> {
                 Flux<String> codeStream = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);
@@ -70,6 +76,10 @@ public class AiCodeGeneratorFacade {
             case MULTI_FILE -> {
                 Flux<String> codeStream = aiCodeGeneratorService.generateMultiFileCodeStream(userMessage);
                 yield processCodeStream(codeStream, CodeGenTypeEnum.MULTI_FILE,appId);
+            }
+            case VUE_PROJECT -> {
+                Flux<String> codeStream = aiCodeGeneratorService.generateVueProjectCodeStream(appId, userMessage);
+                yield processCodeStream(codeStream, CodeGenTypeEnum.MULTI_FILE, appId);
             }
             default -> {
                 String errorMessage = "不支持的生成类型：" + codeGenTypeEnum.getValue();
